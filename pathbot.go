@@ -43,6 +43,7 @@ func explore(location PathbotLocation) {
 		printLocation(location)
 
 		if location.Status == "finished" {
+			fmt.Println(location.Message)
 			os.Exit(0)
 		}
 
