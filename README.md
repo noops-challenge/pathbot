@@ -34,9 +34,6 @@ Can you write a program that can escape the maze?
 
 # ✨ A few ideas
 
-- **Create an automated solver**: Humans can be pretty good at solving mazes, but they'll never be as fast as a well-tuned computer. You could start from the [the included ruby script](./mazebot.rb) or start from scratch in another language.  If you create a solver in another language, please share it with the Noops!
-
-
-Pathbot can't wait to see what you make!
+- **Create an automated solver**: Humans can be pretty good at solving mazes, but they'll never be as fast as a well-tuned computer. Start from the included go program or wriate a program that can escape in another language.
 
 More about Pathbot here: https://noopschallenge.com/challenges/pathbot
