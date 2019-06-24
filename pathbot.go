@@ -78,8 +78,7 @@ func printLocation(location PathbotLocation) {
 }
 
 func apiPost(path string, body io.Reader) PathbotLocation {
-	//domain := "https://api.noopschallenge.com"
-	domain := "http://localhost:3004"
+	domain := "https://api.noopschallenge.com"
 	res, err := http.Post(domain+path, "application/json", body)
 	if err != nil {
 		panic(err.Error())
