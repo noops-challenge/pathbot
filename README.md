@@ -1,4 +1,6 @@
 
+![pathbot](https://user-images.githubusercontent.com/212941/60119358-19978f00-9733-11e9-8231-79849f651541.png)
+
 # 👋 Meet Pathbot
 
 Like its cousin Mazebot, Pathbot is always getting lost.
