@@ -7,8 +7,7 @@ Like its cousin Mazebot, Pathbot is always getting lost.
 
 While exploring the deeper subterranean floors of the Noops, Inc. complex, Pathbot came upon a [TI-99/4A](https://en.wikipedia.org/wiki/Texas_Instruments_TI-99/4A) with a collection of 1970s-era text adventure games. Pathbot eventually went back to work on the Noops assembly line, but it just couldn't stop thinking about hunting Wumpuses, avoiding pits, and escaping from the Grue.
 
-Enter one of pathbot's labyrinths and see if you can make it out.
-
+Enter one of Pathbot's labyrinths and see if you can make it out.
 
 ## ✳️ How to play
 
@@ -28,11 +27,11 @@ Every location in pathbot's many mazes will return you a JSON object with the fo
 
 See the [API documentation](./API.md) for more information.
 
-# Starter Kits
+# Starter kits
 
 ## Go interactive client
 
-Pathbot has included a [starter written in go](./pathnot.go) that will let you explore its mazes.
+Pathbot has included a [starter written in go](./pathbot.go) that will let you explore its mazes.
 
 Run it: `go run pathbot.go`.
 
@@ -42,7 +41,7 @@ You might need to [install go](https://golang.org/doc/install#install).
 
 - **Create an automated solver**: Humans can be pretty good at solving mazes, but they'll never be as fast as a well-tuned computer. Start from the included go program or write a program that can escape in another language.
 
-- **Make it graphical**: Each room has a description. Use these descriptions to create a richer playing experience. Add a map of the rooms exlored so far.
+- **Make it graphical**: Each room has a description. Use these descriptions to create a richer playing experience. Add a map of the rooms explored so far.
 
 - **Make your own text adventure**: Perhaps you want to create your own game, complete with [grues](https://en.wikipedia.org/wiki/Grue_%28monster%29). Start out with [Twine](https://twinery.org/) or write your own engine. Anything is possible!
 
