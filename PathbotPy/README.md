@@ -1,14 +1,14 @@
 # 👋 Meet PathbotPy
 
-PathbotPy is module consisting of a set of python classes built around the original [Pathbot API](https://github.com/Oracking/pathbot/blob/master/API.md), to facilitate easy visualization and navigation within the maze. To play the game, simply run `python3 pathbot.py` in the **console**. The game will not render properly if you run it from IDLE, and it may misbehave within other editors, similarly. It is built specifically as a console game.
+PathbotPy is a module consisting of a set of python classes built around the original [Pathbot API](https://github.com/Oracking/pathbot/blob/master/API.md), to facilitate easy visualization and navigation within the maze. To play the game, simply run `python3 pathbot.py` in the **console**. The game will not render properly if you run it from IDLE, and it may misbehave within other editors, similarly. It is built specifically as a console game.
 
 Also remember to resize your console so the game fits nicely.
 
 ## 🤖 Building your automated solver for the game
 
-As it stands, there is no automated solver for the maze. However, `ConsoleWorld` was built with this in mind. To replace user interaction with an automated solver you simply need a callable which accepts a Map object, and returns one of ["W","A","S","D"] corresponding to an instruction for the rover to move ["up","left","down","right"]. See further instructions below:
+As it stands, there is no automated solver for the maze. However, `ConsoleWorld` was built with this in mind. To replace user interaction with an automated solver you simply need a callable which accepts a `Map` object, and returns one of ``["W","A","S","D"]`` corresponding to an instruction for the rover to move [up,down,left,right]. See further instructions below:
 
-First of all, read the `docstring` for the Map object:
+Firstly, read the `docstring` for the Map object. This has also been included here for reference:
 
 ```
     """
@@ -57,20 +57,20 @@ In our `solver.py` we import our `ConsoleWorld` object and proceed as follows:
 And that's it! You have linked your solver to the game world.
 
 ### Useful things to note about Map object
-The Map object is the only parameter passed to your callable, therefore you have to determine the entire state of the game from your Map object. And there are attributes to help you determine just that. Here are the most important ones:
+The Map object is the only parameter passed to your callable; therefore, you have to determine the entire state of the game from your `Map` object. There are attributes to help you determine just that. Here are the most important ones:
 
 - `map.rover_position`: Coordinate of the rover's current position
-- `map.exit_found`: Boolean indicating whether exit direction was determines
+- `map.exit_found`: Boolean indicating whether the rover has reached launchpad destination.
 - `map.exit_distance`: Number of moves to get to exit, disregarding obstacles
-- `map.exit_direction`: One of [N,S,E,W,NW,NE,SE,SW], indicating direction of exit
-- `map.move_successful`: Boolean indicating whether the most recent move was successful.
+- `map.exit_direction`: One of `["N","S","E","W","NW","NE","SE","SW"]`, indicating direction of exit
+- `map.move_successful`: Boolean indicating whether the most recent move was successful
 
-Also you can index the map with coordinates like so: `region = Map[x,y]`. Therefore, you never have to directly access `map.matrix` and deal with 2 dimensional lists. However, you are always free to do so.
+Also you can index the map with coordinates like so: `region = Map[x,y]`. Therefore, you never have to directly access `map.matrix` and deal with 2 dimensional array/list. However, you are always free to do so.
 
 ## ✨ TODO
 
-- **Build a GUI**: The game currently runs within the console, which is convenient, but limiting. It is difficult to design beautiful cross-platform console UIs. Therefore, a GUI will have to be built from built-in libraries. Currently looking at using `turtle`.
+- **Build a GUI**: The game currently runs within the console, which is convenient, but limiting. It is difficult to design beautiful cross-platform console UIs. Therefore, a GUI will have to be built from built-in libraries. Currently looking at using [turtle](https://docs.python.org/3.3/library/turtle.html?highlight=turtle).
 
 - **Build an Automated Solver**: No automated solver has yet been built for the game. You may want to try your hands on this. You can scroll up to the section that talks about building your automated solver to learn more about how to proceed.
 
-- **Test Game Accross Multiple Platforms**: Although, most of the console interactions are theoretically cross-platform, this game has only been tested to work on Linux. It will be helpful to test this game
+- **Test Game Accross Multiple Platforms**: Although most of the console interactions are theoretically cross-platform, this game has only been tested to work on Linux. It will be helpful to test this game on other platforms. Any feedback is appreciated.
