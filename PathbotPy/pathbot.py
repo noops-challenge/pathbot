@@ -1,6 +1,3 @@
-"""
-    Module containing
-"""
 import sys
 import time
 import json
@@ -392,7 +389,7 @@ class ConsoleWorld:
 def main():
     game = ConsoleWorld(input_interface=std_interface)
     game.start()
-    
+
 
 if __name__ == "__main__":
     main()
