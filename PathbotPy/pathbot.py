@@ -20,7 +20,7 @@ def std_interface(map):
     Returns one of: [W,A,S,D], corresponding to [up,left,down,right]
     movement
 
-    :param map: Map object containing information about state of game
+    :param map: Map object containing information about state of the game
     """
     # current_position = map.rover_position
     # move_successful = map.move_successful
@@ -33,7 +33,7 @@ def mprint(message):
     """
     Returns None. Prints messages to console in the form of an online chat.
 
-    :param message: A str message or an object that has a __str__ method.
+    :param message: A string, or an object that has a __str__ method.
     """
     to_print = message
     if not isinstance(message, str):
@@ -103,14 +103,14 @@ class WebAPI:
 
     def request_move(self, direction, next_position):
         """
-        Returns dict response from server after requesting move. Extra key,
-        "region_type" is added to server response. Value for "region_type" is
+        Returns dict response from server after requesting a move. Extra key,
+        "region_type", is added to server response. Value for "region_type" is
         "0" for a successful move and "#" for a failed move.
 
         :param direction: one of: [N,S,E,W]; Indicates direction of movement
-        :param next_position: (x,y) coordinates indicating the position you
-            intend to move to. These coordinates depend on the nature of
-            your map. It is used solely for caching.
+        :param next_position: (x,y) coordinates indicating intended
+            destination. There are no strict rules for coordinates.
+            They are used solely for caching.
         """
         try:
             response = self.cache[next_position]
@@ -158,7 +158,8 @@ class Map:
         Rover coordinates start at (0,0). The positive x and y directions
         are right and up, respectively. The negative x and y directions are
         left and down, respectively.
-        Map objects support indexing like so: map[x,y].
+        Map objects support indexing like so: map[x,y], where x and y are
+        coordinates (not indices). Coordinates can be negative.
     """
     def __init__(self):
         self.api = WebAPI()
@@ -173,7 +174,7 @@ class Map:
         self.exit_direction = None
         self.move_successful = True # Indicates whether last move was a success
 
-    def move(self, direction=None):
+    def move(self, direction):
         """
         Returns a boolean indicating whether the move was a success.
 
@@ -216,7 +217,7 @@ class Map:
         :param direction: one of: [left,right,up,down]; Indicates direction of
             movement
         :param new_position: Tuple with coordinates of next position: (x,y)
-        :param at_boundary: Boolean indicating if rover is at a boundary
+        :param at_boundary: Boolean indicating whether rover is at a boundary
         """
         response = self.api.request_move(self.directions[direction],
                                          new_position)
@@ -234,7 +235,7 @@ class Map:
 
     def expand(self, direction, region_type):
         """
-        Returns None. Expands the self.matrix to reflect new regions and
+        Returns None. Expands self.matrix to reflect new regions and
         recalculates map boundaries.
 
         :param direction: one of: [left,right,up,down]; Indicates direction of
@@ -275,11 +276,11 @@ class Map:
 
     def __resolve_indices(self, x_y):
         """
-        Returns a tuple (x,y) corresponding to self.matrix indices.
+        Returns a tuple (x,y) corresponding indices for self.matrix.
         y is the index for the outer list and x is the index for the
         inner list
 
-        :param x_y: Tuple containing (x,y) position on map.
+        :param x_y: Tuple containing (x,y) coordinates on map.
         """
         x, y = x_y
         x = x - self.boundaries.min_x
@@ -299,9 +300,8 @@ class ConsoleWorld:
         """
         Returns None. Initiates console world.
 
-        :param input_interface: A callable that returns a string corresponding
-            to a user input. Typically, this is python's <input> function, but
-            can be replaced.
+        :param input_interface: A callable that accepts a Map object and
+            returns one of [W,A,S,D] or Q, optionally.
         """
         self.map = Map()
         self.input_interface = input_interface
@@ -314,7 +314,7 @@ class ConsoleWorld:
                        "SE": u"\u2198", "SW": u"\u2199"}
 
     def start(self):
-        """Returns None. Initiates the game and prints pre ...
+        """Returns None. Initiates the game and prints prologue
         """
         mprint("16:08:42 -- Hurry up, Engineer!")
         mprint("16:08:39 -- The Curiosity Rover sent to Mars "
