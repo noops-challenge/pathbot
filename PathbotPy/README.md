@@ -1,4 +1,6 @@
-# 👋 Meet PathbotPy
+## ✌️ Meet PathbotPy
+
+Firstly, familiarize yourself with [Pathbot](https://github.com/noops-challenge/pathbot/blob/master/README.md) if you haven't already.
 
 PathbotPy is a module consisting of a set of python classes built around the original [Pathbot API](https://github.com/Oracking/pathbot/blob/master/API.md) to facilitate easy visualization and navigation within the maze. To play the game, simply run `python3 pathbot.py` in the **console**. The game will not render properly if you run it from IDLE, and it may misbehave within other editors, similarly. It is built specifically as a console game.
 
@@ -6,7 +8,31 @@ Also remember to resize your console so the game fits nicely.
 
 ## 🤖 Building your automated solver for the game
 
-As it stands, there is no automated solver for the maze. However, `ConsoleWorld` was built with this in mind. To replace user interaction with an automated solver you simply need a callable which accepts a `Map` object and returns one of ``["W","A","S","D"]`` corresponding to an instruction for the rover to move [up,left,down,right]. See further instructions below:
+#### Firstly, how easy is it to integrate a solver?
+Let's look at an example solver that moves the rover in random directions until the exit is found. We just create a python file in the same folder as `pathbot.py` and write the following in it:
+
+```
+    from random import choice
+    from pathbot import ConsoleWorld
+
+    def random_solver(map):
+        return choice(["W", "A", "S", "D"])
+
+    game = ConsoleWorld(input_interface=random_solver)
+    game.start()
+```
+
+Now run your file from the terminal and you will see your rover moving on the map.
+
+However, you may want your rover to be a bit wiser and not move in random directions. Below is the information you'll need to create your own automated solver:
+
+#### What do you need to do to integrate your solver?
+
+As it stands, there is no automated solver for the maze. However, `ConsoleWorld` was built with this in mind. To replace user interaction with an automated solver you simply need a callable which accepts a `Map` object and returns one of `["W","A","S","D"]` corresponding to an instruction for the rover to move [up,left,down,right]. See further instructions below.
+
+
+
+#### Understanding the `Map` object
 
 Firstly, read the `docstring` for the Map object. This has also been included here for reference:
 
@@ -28,9 +54,24 @@ Firstly, read the `docstring` for the Map object. This has also been included he
     """
 ```
 
-Secondly, you need a callable that will accept the `map` object. After every instruction to move the rover, the callable will be called, and the map will be passed to it. It is expected that the callable will return one of the characters [W,A,S,D] to indicate the next direction the rover should move in. In addition, if the callable returns Q, the game will end.
+#### A few more things to note about `Map` object
 
-To illustrate let's create a solver function in a `solver.py` file:
+The entire state of the game can be determined from the `Map` object. Here are the attributes to help you determine that:
+
+- `map.rover_position`: Coordinates of the rover's current position
+- `map.exit_found`: Boolean indicating whether the rover has reached launchpad destination.
+- `map.exit_distance`: Number of moves to get to exit, disregarding obstacles
+- `map.exit_direction`: One of `["N","S","E","W","NW","NE","SE","SW"]`, indicating direction of exit
+- `map.move_successful`: Boolean indicating whether the most recent move was successful
+
+Also, you can index the map with coordinates (not indices) like so: `region = Map[x,y]`. Therefore, you never have to directly access `map.matrix` and deal with 2 dimensional array/list and indices. However, you are always free to do so.
+
+
+#### Creating a `solve` function
+
+As mentioned, all you need to integrate your solver is a callable. After every instruction to move the rover, the callable will be called, and the map will be passed to it. It is expected that the callable will return one of the characters [W,A,S,D] to indicate the next instruction for the rover. In addition, if the callable returns Q, the game will end.
+
+To illustrate, let's create a `solve` function in a `solver.py` file:
 
 ```
     def solve(map):
@@ -48,50 +89,41 @@ To use this interface with our game, we import `ConsoleWorld` into our `solver.p
     game.start()
 ```
 
-And that's it! Your solve function now controls the rover.
+And that's it! Your `solve` function now controls the rover.
 
-Alternatively, our callable can be a method of an object, instead of a function.
 
-Let's assume we want to create a `Solver` class with a `solve` method, instead of our plain `solve` function. This has a couple of advantages, chief of them being the ability of the `Solver` object to persist data after the `solve` method has been called. This is contrary to the function, which loses all variables after it is called.
+#### Creating a `Solver` class
 
-Our `Solver` class may look something like this:
+Alternatively, our callable can be a method of an object, instead of a function. For example, an object with a `solve` method
+
+The advantage of using an object is that the object can hold information about its state, in the form of attributes, after its `solve` method is done executing. This contrasts our original `solve` function, which loses all data of its state after it is done executing.
+
+Lets create a sample `Solver` class:
 
 ```
     class Solver:
         def __init__(self):
-            .
-            .
             # Some attributes to store solver's state
+            # .
+            # .
 
         def solve(self, map):
             # Some logic here to determine rover's next move
-            .
-            .
-            .
+            # based on state of map
+            # .
+            # .
             return "W" or "A" or "S" or "D"
 ```
 
-Next to connect it to our game we import `ConsoleWorld` into `solver.py` and proceed as follows:
+To connect it to our game, we import `ConsoleWorld` into `solver.py` and proceed as follows:
 
 ```
     solver = Solver()
-    game = ConsoleWorld(input_interface=solver.interface)
+    game = ConsoleWorld(input_interface=solver.solve)
     game.start()
 ```
 
-
-### Useful things to note about Map object
-The Map object is the only parameter passed to your callable; therefore, you have to determine the entire state of the game from your `Map` object. There are attributes to help you determine just that. Here are the most important ones:
-
-- `map.rover_position`: Coordinate of the rover's current position
-- `map.exit_found`: Boolean indicating whether the rover has reached launchpad destination.
-- `map.exit_distance`: Number of moves to get to exit, disregarding obstacles
-- `map.exit_direction`: One of `["N","S","E","W","NW","NE","SE","SW"]`, indicating direction of exit
-- `map.move_successful`: Boolean indicating whether the most recent move was successful
-
-Also, you can index the map with coordinates (not indices) like so: `region = Map[x,y]`. Therefore, you never have to directly access `map.matrix` and deal with 2 dimensional array/list and indices. However, you are always free to do so.
-
-## ✨ TODO
+## ✨ To Do List
 
 - **Build a GUI**: The game currently runs within the console, which is convenient, but limiting. It is difficult to design beautiful cross-platform console UIs. Therefore, a GUI will have to be built from built-in libraries. Currently looking at using [turtle](https://docs.python.org/3.3/library/turtle.html?highlight=turtle).
 
