@@ -31,7 +31,7 @@ See the [API documentation](./API.md) for more information.
 
 ## Go interactive client
 
-Pathbot has included a [starter written in go](./pathbot.go) that will let you explore its mazes.
+Pathbot has included a [starter written in go](./starters/pathbot.go) that will let you explore its mazes.
 
 Run it: `go run pathbot.go`.
 
@@ -47,4 +47,4 @@ You might need to [install go](https://golang.org/doc/install#install).
 
 - **Create an audio adventure**: Try using the [Speech Synthesis API](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis) to make an immersive audio experience.
 
-More about Pathbot here: https://noopschallenge.com/challenges/pathbot
+More about Pathbot at [noopschallenge.com](https://noopschallenge.com/challenges/pathbot).
