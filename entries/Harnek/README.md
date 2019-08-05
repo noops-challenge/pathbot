@@ -14,6 +14,10 @@
 
     open "index.html" in browser
 
-#### Source Code
+## Source Code
 
-    [Pathbot](https://github.com/Harnek/noops-challenge-pathbot)
+- [Project Repo](https://github.com/Harnek/noops-challenge-pathbot)
+
+## Author Info
+
+- Harnek - [Github](https://github.com/Harnek/)
