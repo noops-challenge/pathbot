@@ -1,11 +1,82 @@
 const http = require("https");
 
+class Maze {
+  constructor() {
+    this.map = {0: {0: " "}};
+    this.x = 0;
+    this.y = 0;
+    this.minX = -1;
+    this.minY = -1;
+    this.maxX = 1;
+    this.maxY = 1;
+  }
+
+  get prettyMap() {
+    var output = "";
+    for (var x = this.minX; x <= this.maxX; x++) {
+      for (var y = this.minY; y <= this.maxY; y++) {
+        output += (this.map[x] || {})[y] || " ";
+      }
+      output += "\n";
+    }
+    return output;
+  }
+
+  directionToOffsets(direction) {
+    if (direction == "N") {
+      return [0, 1];
+    }
+    if (direction == "S") {
+      return [0, -1];
+    }
+    if (direction == "E") {
+      return [1, 0];
+    }
+    if (direction == "W") {
+      return [-1, 0];
+    }
+  }
+
+  move(direction) {
+    var offsets = this.directionToOffsets(direction);
+
+    this.map[this.x][this.y] = " ";
+
+    this.x += offsets[0];
+    this.y += offsets[1];
+
+    if (this.minX >= this.x) this.minX -= 1;
+    if (this.maxX <= this.x) this.maxX += 1;
+    if (this.minY >= this.y) this.minY -= 1;
+    if (this.maxY <= this.y) this.maxY += 1;
+
+    this.map[this.x] = this.map[this.x] || {};
+    this.map[this.x][this.y] = "@";
+  }
+
+  discover(exits) {
+    for (let direction of ["N", "S", "E", "W"]) {
+      var newValue = "?";
+      if (exits.includes(direction)) {
+        newValue = " ";
+      } else {
+        newValue = String.fromCharCode(9608);
+      }
+
+      var offsets = this.directionToOffsets(direction);
+
+      if (! this.map[this.x + offsets[0]]) this.map[this.x + offsets[0]] = {};
+      this.map[this.x + offsets[0]][this.y + offsets[1]] = newValue;
+    }
+  }
+}
+
 Number.prototype.mod = function(n) {
   return ((this % n) + n) % n;
 };
 
 function turn(currentDirection, newDirectionOffset) {
-  const directions = ["N", "E", "S", "W"];
+  const directions = ["W", "S", "E", "N"];
   return directions[
     (directions.indexOf(currentDirection) + newDirectionOffset).mod(
       directions.length
@@ -45,15 +116,17 @@ async function start() {
   var moves = 0;
   var startTime = new Date().getTime();
 
+  var maze = new Maze();
+
   var result = await httpReq("https://api.noopschallenge.com/pathbot/start", {
     method: "POST"
   });
 
   result = JSON.parse(result);
 
-  console.log(result.description);
-
   let newUrl = "https://api.noopschallenge.com" + result.locationPath;
+
+  maze.discover(result.exits);
 
   // Choose first direction
   let direction = result.exits[0];
@@ -67,6 +140,8 @@ async function start() {
   while (true) {
     moves += 1;
 
+    maze.move(direction);
+
     result = JSON.parse(
       await httpReq(
         newUrl,
@@ -79,10 +154,12 @@ async function start() {
       )
     );
 
-    console.log(result.description);
-
     if (result.status == "finished") break;
 
+    maze.discover(result.exits);
+
+    console.log("\x1b[2J" + maze.prettyMap);
+    
     direction = chooseDirection(direction, result.exits);
 
     newUrl = "https://api.noopschallenge.com" + result.locationPath;
